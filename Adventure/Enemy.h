@@ -16,3 +16,5 @@ public:
 
 };
 
+//que se muera, 3 enemigos y otra cosa
+//ir a internet y buscar raylib; es una libreria para hacer quien sabe que :V

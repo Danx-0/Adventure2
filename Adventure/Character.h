@@ -37,12 +37,19 @@ public:
 	
 	
 	//Sets
+	void SetName(std::string n) { name = n; }
 	void SetLevel(int l) { level = l;}
 	void SetHp(int h) { hp = h;}
 	void SetExp(int e) { exp = e;}
 	void SetDamageMin(int DM) { damageMin = DM;}
 	void SetDamageMax(int DM) { damageMax = DM;}
 	void SetDefence(int D) { defence = D;}
+
+	void AddExp(int xp) { exp += xp; }
+
+	void TakeDamage(int value);
+	//int DoDamage();
+
 
 };
 
