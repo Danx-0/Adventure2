@@ -1,0 +1,93 @@
+#include "Game.h"
+
+Game::Game()
+{
+	this->playing = true;
+
+}
+
+Game::~Game()
+{
+}
+
+void Game::InitGame()
+{
+	std::cout << "Starting the Game" << std::endl;	
+	NewPlayer();
+}
+
+void Game::mainMenu()
+{
+	std::cout << "----------MAIN MENU----------" << std::endl;	
+	std::cout << "0: QuitGame" << std::endl;
+	std::cout << "1: Player Stats" << std::endl;
+	std::cout << "2: New Enemy" << std::endl;
+	std::cout << "3: Travel" << std::endl;
+	
+	std::cout << "Enter Choice" << std::endl;	
+	std::cin >> choice;
+
+	switch (choice)
+	{
+	case 0:
+		this->playing = false;
+		break;
+	case 1:
+		PrintPlayerStats();
+		break;
+	case 2:
+		NewEnemy();
+		break;
+	case 3:
+		Travel();
+		break;
+
+	default:
+		std::cout << "Invalid Option" << std::endl;
+		break;
+
+	}
+}
+
+void Game::Travel()
+{
+	v.GenerateEvent(player);
+
+}
+
+void Game::SaveGame()
+{
+}
+
+void Game::LoadGame()
+{
+}
+
+void Game::NewPlayer()
+{
+	player.InitPlayer("PacoOoOo");
+}
+
+void Game::NewEnemy()
+{
+	std::string name = "smile";
+	int level = 10;
+	int damage = 10;
+	int hp = 1;
+	int exp = 1;
+	int defence = 10;
+	enemy = new Enemy(name, level, hp, damage, defence, exp);//importa el orden en el que se esta colocando en la clase de "Enemy" en la partde  de public 
+	enemy->PrintEnemyStats();
+
+}
+
+void Game::PrintPlayerStats()
+{
+	player.PrintPlayerStats();
+ 
+}
+
+bool Game::GetPlaying()
+{
+	return this->playing;
+}
