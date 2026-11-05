@@ -159,7 +159,7 @@ void Game::GameOver()
 
 	while (!decided)
 	{
-		std::cout << "========== GAME OVER ==========" << std::endl;
+		std::cout << "-.-.-.-.-.- GAME OVER -.-.-.-.-.-" << std::endl;
 		std::cout << "1: Restart from 0" << std::endl;
 		std::cout << "2: Load last save" << std::endl;
 		std::cout << "0: Quit Game" << std::endl;
