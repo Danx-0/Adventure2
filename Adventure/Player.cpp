@@ -19,7 +19,7 @@ void Player::InitPlayer(std::string name)
 	SetHp(10 + GetLevel() * 5 + this->intelligence + this->dexterity);
 	SetDamageMin(this->strenght - 2);
 	SetDamageMax(this->strenght * 2);
-	SetDefence((this->agility * 2) / (this->luck - 3));
+	SetDefence((this->agility + this->luck /2));
 
 }
 
@@ -110,7 +110,7 @@ void Player::UpdateValues()
 	SetHp(10 + GetLevel() * 5 + this->intelligence + this->dexterity);
 	SetDamageMin(this->strenght - 2);
 	SetDamageMax(this->strenght * 2);
-	SetDefence((this->agility * 2) / (this->luck - 3));
+	SetDefence((this->agility + this->luck /2));
 }
 
 bool Player::LoadStats(const std::string& filename)

@@ -253,7 +253,7 @@ void Event::PuzzleEncounter(Player& p)
 		}
 	}
 
-	// Resultado
+	
 	if (wordToGuess == theWord)
 	{
 		int expReward = p.GetLevel() * 10 + lifes * 2;   // bonus por vidas sobrantes
