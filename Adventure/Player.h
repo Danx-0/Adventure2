@@ -23,7 +23,7 @@ public:
     void LevelUp();
     void AddStats(int stat, int value);
     void UpdateValues();
-    void LoadStats(const std::string& filename);
+    bool LoadStats(const std::string& filename);
     std::string SaveStats();
 
     int GetLuck() { return luck; }

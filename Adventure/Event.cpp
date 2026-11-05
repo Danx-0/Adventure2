@@ -159,7 +159,6 @@ void Event::EnemyEncounter(Player& p)
 					else
 					{
 						std::cout << "Enemy misses!" << std::endl;
-
 					}
 				}
 				else
@@ -173,6 +172,16 @@ void Event::EnemyEncounter(Player& p)
 					{
 						std::cout << "Enemy misses!" << std::endl;
 					}
+				}
+
+				PlayerDefending = false;  
+
+				if (!p.IsAlive()) 
+				{
+					playerDefeated = true;
+					std::cout << "---------------" << std::endl;
+					std::cout << "   " << p.GetName() << "Has died..." << std::endl;
+					std::cout << "---..-.-.-..-.-.-..---" << std::endl;
 				}
 			}
 			playerTurn = true;

@@ -33,6 +33,8 @@ public:
 	void LevelUp();
 	void SkillUp();
 
+	void GameOver();
+
 	bool GetPlaying();
 
 };

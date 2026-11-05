@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Game.h"
 
 Player::Player()
 {
@@ -9,6 +8,7 @@ Player::Player()
 	this->luck = 5;
 	this->dexterity = 5;
 	this->MaxXp = 10;
+	this->skillPoints = 0;
 }
 
 void Player::InitPlayer(std::string name)
@@ -16,7 +16,7 @@ void Player::InitPlayer(std::string name)
 	InitCharacter(name);
 	SetLevel(1);
 	SetExp(0);
-	SetHp((this->intelligence*2) / (this->dexterity-3));
+	SetHp(10 + GetLevel() * 5 + this->intelligence + this->dexterity);
 	SetDamageMin(this->strenght - 2);
 	SetDamageMax(this->strenght * 2);
 	SetDefence((this->agility * 2) / (this->luck - 3));
@@ -44,10 +44,20 @@ void Player::LevelUp()
 {
 	while (GetExp() >= MaxXp)
 	{
-		SetExp(GetExp() - MaxXp);
-		SetLevel(GetLevel() + 1);
-		MaxXp = GetLevel() * 10;
-		skillPoints++;
+		bool leveledUp = false;
+		while (GetExp() >= MaxXp)
+		{
+			SetExp(GetExp() - MaxXp);
+			SetLevel(GetLevel() + 1);
+			MaxXp = GetLevel() * 10;
+			skillPoints++;
+			leveledUp = true;
+		}
+		if (leveledUp)
+		{
+			UpdateValues();
+			std::cout << "LEVEL UP!, HP restored" << std::endl;
+		}
 	}
 }
 
@@ -97,19 +107,19 @@ void Player::AddStats(int stat, int value)
 
 void Player::UpdateValues()
 {
-	SetHp((this->intelligence * 2) / (this->dexterity - 3));
+	SetHp(10 + GetLevel() * 5 + this->intelligence + this->dexterity);
 	SetDamageMin(this->strenght - 2);
 	SetDamageMax(this->strenght * 2);
 	SetDefence((this->agility * 2) / (this->luck - 3));
 }
 
-void Player::LoadStats(const std::string& filename)
+bool Player::LoadStats(const std::string& filename)
 {
 	std::ifstream inFile(filename);
 	if (!inFile.is_open())
 	{
 		std::cerr << "ERROR: Cant open file" << filename << std::endl;
-		return;
+		return false;
 	}
 	std::string name = "";
 	int l;
@@ -118,9 +128,9 @@ void Player::LoadStats(const std::string& filename)
 	int dmin;
 	int dmax;
 	int d;
-	int sp;
+
 	//std::getline(inFile, name);
-	inFile 
+	inFile
 		>> name
 		>> l
 		>> xp
@@ -134,8 +144,8 @@ void Player::LoadStats(const std::string& filename)
 		>> agility
 		>> intelligence
 		>> luck
-		>> dexterity
-	    >> sp;
+		>> dexterity;
+
 	inFile.close();
 
 	SetName(name);
@@ -145,25 +155,26 @@ void Player::LoadStats(const std::string& filename)
 	SetDamageMin(dmin);
 	SetDamageMax(dmax);
 	SetDefence(d);
-	SetSkillPoints(sp);
+	return true;
 
 }
 
 std::string Player::SaveStats()
 {
-	return this->GetName() + "" +
+	return this->GetName() + " " +
 		std::to_string(this->GetLevel()) + " " +
 		std::to_string(this->GetExp()) + " " +
+		std::to_string(this->MaxXp) + " " +
+		std::to_string(this->skillPoints) + " " +
 		std::to_string(this->GetHP()) + " " +
 		std::to_string(this->GetDamageMin()) + " " +
 		std::to_string(this->GetDamageMax()) + " " +
 		std::to_string(this->GetDefence()) + " " +
-		std::to_string(this->GetStrenght()) + " " +
-		std::to_string(this->GetAgility()) + " " +
-		std::to_string(this->GetIntelligence()) + " " +
-		std::to_string(this->GetLuck()) + " " +
-		std::to_string(this->GetDexterity()) + " " +
-	    std::to_string(this->GetSkillPoints());
+		std::to_string(this->strenght) + " " +
+		std::to_string(this->agility) + " " +
+		std::to_string(this->intelligence) + " " +
+		std::to_string(this->luck) + " " +
+		std::to_string(this->dexterity);
 }
 
 //int Player::GetLuck()

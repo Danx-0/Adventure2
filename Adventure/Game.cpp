@@ -70,6 +70,11 @@ void Game::Travel()
 {
 	this->v.GenerateEvent(player);
 
+	if (!player.IsAlive())
+	{
+		GameOver();
+	}
+
 }
 
 void Game::SaveGame()
@@ -78,24 +83,26 @@ void Game::SaveGame()
 
 void Game::SavePlayer()
 {
-	std::string fileName = "savePlayer.txt";
-	std::ofstream outFile(fileName);
+	//std::string fileName = "savePlayer.txt";
+	std::ofstream outFile("savePlayer.txt");
 	if (outFile.is_open())
 	{
-		outFile << player.SaveStats() << " ";
+		outFile << player.SaveStats();
+		outFile.close();
+		std::cout << "Game Saved" << std::endl;
 	}
 	else
 	{
 		std::cout << "Cant save Game" << std::endl;
 	}
-	outFile.close();
-	std::cout << "Is saved" << std::endl;
 }
 
 void Game::LoadPlayer()
 {
-	std::string fileName = "savePlayer.txt";
-	player.LoadStats(fileName);
+	if (player.LoadStats("savePlayer.txt"))
+	{
+		std::cout << "Player loaded!" << std::endl;
+	}
 }
 
 void Game::NewPlayer()
@@ -145,6 +152,54 @@ void Game::SkillUp()
 	{
 		std::cout << "Not enough Skill points" << std::endl;
 	}
+}
+void Game::GameOver()
+{
+	bool decided = false;
+
+	while (!decided)
+	{
+		std::cout << "========== GAME OVER ==========" << std::endl;
+		std::cout << "1: Restart from 0" << std::endl;
+		std::cout << "2: Load last save" << std::endl;
+		std::cout << "0: Quit Game" << std::endl;
+		std::cin >> choice;
+
+		switch (choice)
+		{
+		case 1: // Reiniciar desde 0
+			player = Player();
+			NewPlayer();
+			std::cout << "New game started!" << std::endl;
+			decided = true;
+			break;
+
+		case 2: // Cargar la ultima partida guardada
+			if (player.LoadStats("savePlayer.txt"))
+			{
+				std::cout << "Save loaded!" << std::endl;
+				decided = true;
+			}
+			else
+			{
+				std::cout << "No save found, choose another option" << std::endl;
+			}
+			break;
+
+		case 0: // Salir
+			this->playing = false;
+			decided = true;
+			break;
+
+		default:
+			std::cout << "Invalid Option" << std::endl;
+			break;
+		}
+	}
+
+
+
+
 }
 void Game::LevelUp()
 {
