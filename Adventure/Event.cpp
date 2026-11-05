@@ -1,7 +1,11 @@
 #include "Event.h"
+#include "Enemy2.h"
+#include "Enemy3.h"
 
 Event::Event()
 {
+	baseEnemy = nullptr;
+	numOffEvents = 0;
 }
 
 Event::~Event()
@@ -50,16 +54,26 @@ void Event::EnemyEncounter(Player& p)
 	}
 	std::cout << "------New Enemy Encounter------" << std::endl;
 
-	int level = p.GetLevel();
-	int hp = level * 10;
-	int damageMin = rand() % level + 1;
-	int damageMax = (rand() % level +1)* 2;
-	int currentDamage = rand() / (damageMax - damageMin + 1);
-	int defence = rand() % level;
-	int exp = level * 10;
-	baseEnemy = new Enemy("Pato", level, hp, currentDamage, defence, exp);
+	int level = p.GetLevel(); //se supone que el enemigo depende del nivel del jugador
+	if (level <= 2)
+	{
+		baseEnemy = new Enemy2(level);  
+	}
+	else if (level <= 4)
+	{
+		// Orden: name, level, hp, damage, defence, exp
+		baseEnemy = new Enemy("Smile", level, level * 3, level * 2, 0, level * 12); 
+	}
+	else
+	{
+		baseEnemy = new Enemy3(level);  
+	}
+	baseEnemy->PrintStats();
+	std::cout << "A wild " << baseEnemy->GetName() << " appears!" << std::endl;
 
-	while (!playerDefeated || !enemyDefeated || !escape)
+
+
+	while (!playerDefeated && !enemyDefeated && !escape)
 	{
 			int scapeRand = 0;
 			int attackRoll = 0;
@@ -68,11 +82,11 @@ void Event::EnemyEncounter(Player& p)
 		if (playerTurn)
 		{
 			std::cout << "Choose your action" << std::endl;
+			std::cout << "0: Scape" << std::endl;
 			std::cout << "1: Attack" << std::endl;
 			std::cout << "2: Defend" << std::endl;
 			std::cout << "3: Player Sheet" << std::endl;
 			std::cout << "4: Show Enemy Stats" << std::endl;
-			std::cout << "0: Scape" << std::endl;
 
 			std::cin >> choice;
 
@@ -80,7 +94,7 @@ void Event::EnemyEncounter(Player& p)
 			switch (choice) //dentro de un swich no puedo poner int 
 			{
 			case 0:
-				scapeRand = (rand() % 100) + p.GetLuck();
+				scapeRand = (rand() % 100) + (p.GetLuck() + p.GetAgility()) / 2;
 					if (scapeRand > 25)
 					{
 						std::cout << "Escaped...." << std::endl;
@@ -90,10 +104,16 @@ void Event::EnemyEncounter(Player& p)
 			case 1:
 				std::system("cls");
 				attackRoll = rand() % 100 + 1;
-				if (attackRoll > (50 - p.GetAgility()))
+				if (attackRoll > 50 - (p.GetStrenght() + p.GetDexterity()))
 				{
-					std::cout << "Player hit Enemy" << std::endl;
-					baseEnemy->TakeDamge(p.DoDamage());
+					int dmg = p.DoDamage();
+					baseEnemy->TakeDamge(dmg);
+					std::cout << "Player hits " << baseEnemy->GetName() << " for " << dmg << std::endl;
+					std::cout << baseEnemy->GetName() << " HP left: " << baseEnemy->GetHP() << std::endl;
+				}
+				else
+				{
+					std::cout << "Player misses!" << std::endl;
 				}
 				break;
 			case 2:
@@ -103,7 +123,7 @@ void Event::EnemyEncounter(Player& p)
 				p.PrintPlayerStats();
 				break;
 			case 4:
-				baseEnemy->PrintEnemyStats();
+				baseEnemy->PrintStats();
 				break;
 			default:
 				std::cout << "Invalid Option " << std::endl;
@@ -117,41 +137,49 @@ void Event::EnemyEncounter(Player& p)
 			if (!baseEnemy->IsAlive())
 			{
 				enemyDefeated = true;
-				std::cout << "Enemy Defeated" << std::endl;
+				std::cout << "----------------------" << std::endl;
+				std::cout << baseEnemy->GetName() << " Defeated" << std::endl;
 				std::cout << "Exp: " << baseEnemy->GetExp() << std::endl;
+				p.AddExp(baseEnemy->GetExp());
+				p.LevelUp();  
+				std::cout << "Level: " << p.GetLevel() << std::endl;
+			
+
 			}
 			else
 			{
-				attackRoll = rand() % 100 + 1;
+				int enemyAttackRoll = rand() % 100 + 1 - p.GetLuck();
 				if (PlayerDefending)
 				{
-					if (attackRoll > 75)
+					if (enemyAttackRoll > 75)
 					{
-						std::cout << "Enemy hit player" << std::endl;
+						std::cout << "Enemy hits player" << std::endl;
 						p.TakeDamge(baseEnemy->DoDamage());
 					}
 					else
 					{
-						std::cout << "Enemy miss player" << std::endl;
+						std::cout << "Enemy misses!" << std::endl;
 
 					}
 				}
 				else
 				{
-					if (attackRoll > 45)
+					if (enemyAttackRoll > 45)
 					{
-						std::cout << "Enemy hit player" << std::endl;
+						std::cout << "Enemy hits player" << std::endl;
 						p.TakeDamge(baseEnemy->DoDamage());
 					}
 					else
 					{
-						std::cout << "Enemy miss player" << std::endl;
+						std::cout << "Enemy misses!" << std::endl;
 					}
 				}
 			}
 			playerTurn = true;
 		}
 	}
+	delete baseEnemy;
+	baseEnemy = nullptr;
 }
 
 void Event::PuzzleEncounter(Player& p)

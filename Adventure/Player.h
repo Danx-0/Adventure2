@@ -13,10 +13,11 @@ private:
     int dexterity;
 
     int MaxXp;
-    int skillsPoints;
+    int skillPoints;
 
 public:
     Player();
+    ~Player();
     void InitPlayer(std::string name);
     void PrintPlayerStats();
     void LevelUp();
@@ -25,22 +26,22 @@ public:
     void LoadStats(const std::string& filename);
     std::string SaveStats();
 
-    int GetLuck();
-    void SetLuck(int x);
+    int GetLuck() { return luck; }
+	void SetLuck(int l) { luck = l; }
 
-    int GetStrenght();
-    void SetStrenght(int s);
+    int GetStrenght() { return strenght; }
+	void SetStrenght(int s) { strenght = s; }
 
-    int GetAgility();
-    void SetAgility(int a);
+	int GetAgility() { return agility; }    
+	void SetAgility(int a) { agility = a; }
 
-    int GetIntelligence();
-    void SetIntelligence(int w);
+    int GetIntelligence() { return intelligence; }
+	void SetIntelligence(int i) { intelligence = i; }
 
-    int GetDexterity();
-    void SetDexterity(int r);
+    int GetDexterity() { return dexterity; }
+    void SetDexterity(int d) { dexterity = d; }
 
-   
-    ~Player();
+	int GetSkillPoints() { return skillPoints; }    
+	void SetSkillPoints(int sp) { skillPoints = sp; }
 };
 

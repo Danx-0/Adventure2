@@ -6,7 +6,7 @@ class Event
 {
 private:
 	int numOffEvents;
-	Enemy* baseEnemy;
+	Character* baseEnemy;
 
 public:
 	Event();

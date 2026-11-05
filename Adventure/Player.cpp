@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Game.h"
 
 Player::Player()
 {
@@ -15,7 +16,7 @@ void Player::InitPlayer(std::string name)
 	InitCharacter(name);
 	SetLevel(1);
 	SetExp(0);
-	SetHp((this->intelligence*2) / (this->dexterity-2));
+	SetHp((this->intelligence*2) / (this->dexterity-3));
 	SetDamageMin(this->strenght - 2);
 	SetDamageMax(this->strenght * 2);
 	SetDefence((this->agility * 2) / (this->luck - 3));
@@ -36,22 +37,70 @@ void Player::PrintPlayerStats()
 	std::cout << "Intelligence: " << this->intelligence << std::endl;
 	std::cout << "luck: " << this->luck << std::endl;
 	std::cout << "Dexterity: " << this->dexterity << std::endl;
+	std::cout << "Exp required to level up: " << this->MaxXp << std::endl;
 }
 
 void Player::LevelUp()
 {
+	while (GetExp() >= MaxXp)
+	{
+		SetExp(GetExp() - MaxXp);
+		SetLevel(GetLevel() + 1);
+		MaxXp = GetLevel() * 10;
+		skillPoints++;
+	}
 }
+
+
 
 void Player::AddStats(int stat, int value)
 {
+	if (skillPoints < value)
+	{
+		std::cout << "Not Enough Points" << std::endl;
+	}
+	else
+	{
+		switch (stat)
+		{
+		case 1:
+			this->strenght += value;
+			skillPoints -= value;
+			UpdateValues();
+			break;
+		case 2:
+			this->agility += value;
+			skillPoints -= value;
+			UpdateValues();
+			break;
+		case 3:
+			this->dexterity += value;
+			skillPoints -= value;
+			UpdateValues();
+			break;
+		case 4:
+			this->intelligence += value;
+			skillPoints -= value;
+			UpdateValues();
+			break;
+		case 5:
+			this->luck += value;
+			skillPoints -= value;
+			UpdateValues();
+			break;
+		default:
+			std::cout << "This stat does not exist" << std::endl;
+			break;
+		}
+	}
 }
 
 void Player::UpdateValues()
 {
-	SetHp((this->intelligence * 2) / (this->dexterity - 2));
+	SetHp((this->intelligence * 2) / (this->dexterity - 3));
 	SetDamageMin(this->strenght - 2);
 	SetDamageMax(this->strenght * 2);
-	SetDefence((this->agility * 2) / (this->luck - 2));
+	SetDefence((this->agility * 2) / (this->luck - 3));
 }
 
 void Player::LoadStats(const std::string& filename)
@@ -59,8 +108,7 @@ void Player::LoadStats(const std::string& filename)
 	std::ifstream inFile(filename);
 	if (!inFile.is_open())
 	{
-		std::cerr << "ERROR: Cant open file" << filename
-			<< std::endl;
+		std::cerr << "ERROR: Cant open file" << filename << std::endl;
 		return;
 	}
 	std::string name = "";
@@ -70,12 +118,14 @@ void Player::LoadStats(const std::string& filename)
 	int dmin;
 	int dmax;
 	int d;
+	int sp;
 	//std::getline(inFile, name);
-	inFile >> name
+	inFile 
+		>> name
 		>> l
 		>> xp
 		>> MaxXp
-		>> skillsPoints
+		>> skillPoints
 		>> hp
 		>> dmin
 		>> dmax
@@ -84,7 +134,8 @@ void Player::LoadStats(const std::string& filename)
 		>> agility
 		>> intelligence
 		>> luck
-		>> dexterity;
+		>> dexterity
+	    >> sp;
 	inFile.close();
 
 	SetName(name);
@@ -94,6 +145,7 @@ void Player::LoadStats(const std::string& filename)
 	SetDamageMin(dmin);
 	SetDamageMax(dmax);
 	SetDefence(d);
+	SetSkillPoints(sp);
 
 }
 
@@ -106,55 +158,56 @@ std::string Player::SaveStats()
 		std::to_string(this->GetDamageMin()) + " " +
 		std::to_string(this->GetDamageMax()) + " " +
 		std::to_string(this->GetDefence()) + " " +
-		std::to_string(this->strenght) + " " +
-		std::to_string(this->agility) + " " +
-		std::to_string(this->intelligence) + " " +
-		std::to_string(this->luck) + " " +
-		std::to_string(this->dexterity);
+		std::to_string(this->GetStrenght()) + " " +
+		std::to_string(this->GetAgility()) + " " +
+		std::to_string(this->GetIntelligence()) + " " +
+		std::to_string(this->GetLuck()) + " " +
+		std::to_string(this->GetDexterity()) + " " +
+	    std::to_string(this->GetSkillPoints());
 }
 
-int Player::GetLuck()
-{
-	return this->luck;
-}
-
-void Player::SetLuck(int x)
-{
-	luck = x;
-}
-
-int Player::GetStrenght()
-{
-	return 0;
-}
-
-void Player::SetStrenght(int s)
-{
-}
-
-int Player::GetAgility()
-{
-	return 0;
-}
-
-void Player::SetAgility(int a)
-{
-}
-
-int Player::GetIntelligence()
-{
-	return 0;
-}
-
-void Player::SetIntelligence(int w)
-{
-}
-
-int Player::GetDexterity()
-{
-	return 0;
-}
-
-void Player::SetDexterity(int r)
-{
-}
+//int Player::GetLuck()
+//{
+//	return this->luck;
+//}
+//
+//void Player::SetLuck(int x)
+//{
+//	luck = x;
+//}
+//
+//int Player::GetStrenght()
+//{
+//	return 0;
+//}
+//
+//void Player::SetStrenght(int s)
+//{
+//}
+//
+//int Player::GetAgility()
+//{
+//	return 0;
+//}
+//
+//void Player::SetAgility(int a)
+//{
+//}
+//
+//int Player::GetIntelligence()
+//{
+//	return 0;
+//}
+//
+//void Player::SetIntelligence(int w)
+//{
+//}
+//
+//int Player::GetDexterity()
+//{
+//	return 0;
+//}
+//
+//void Player::SetDexterity(int r)
+//{
+//}

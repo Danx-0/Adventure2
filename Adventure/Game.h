@@ -26,7 +26,7 @@ public:
 
 	void SaveGame();
 	void SavePlayer();
-	void LoadGame();
+	void LoadPlayer();
 	void NewPlayer();
 	void NewEnemy();
 	void PrintPlayerStats();

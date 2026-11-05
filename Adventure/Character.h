@@ -41,13 +41,13 @@ public:
 	void SetLevel(int l) { level = l;}
 	void SetHp(int h) { hp = h;}
 	void SetExp(int e) { exp = e;}
-	void SetDamageMin(int DM) { damageMin = DM;}
-	void SetDamageMax(int DM) { damageMax = DM;}
-	void SetDefence(int D) { defence = D;}
+	void SetDamageMin(int min) { damageMin = min;}
+	void SetDamageMax(int max) { damageMax = max;}
+	void SetDefence(int d) { defence = d;}
 
 	void AddExp(int xp) { exp += xp; }
 
-	void TakeDamage(int value);
+	//void TakeDamage(int value);
 	//int DoDamage();
 
 

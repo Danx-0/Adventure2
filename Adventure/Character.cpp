@@ -26,11 +26,11 @@ void Character::PrintStats()
 {
 	std::system("cls");
 	std::cout << "-----------" << this->name << "----------" << std::endl;
-	std::cout << "Level: " << this->level << "------" << std::endl;
-	std::cout << "HP: " << this->hp << "------" << std::endl;
-	std::cout << "Exp: " << this->exp << "------" << std::endl;
+	std::cout << "Level: " << this->level << std::endl;
+	std::cout << "HP: " << this->hp << std::endl;
+	std::cout << "Exp: " << this->exp << std::endl;
 	std::cout << "Damage: " << this->damageMin << "/" << this->damageMax<< std::endl;
-	std::cout << "Defence: " << this->defence;
+	std::cout << "Defence: " << this->defence << std::endl;
 	std::cout << std::endl;
 
 }
@@ -38,6 +38,10 @@ void Character::PrintStats()
 void Character::TakeDamge(int d)
 {
 	this->hp -= d;
+	if (this->hp < 0)
+	{
+		this->hp = 0;
+	}
 
 }
 

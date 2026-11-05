@@ -68,7 +68,7 @@ void Game::mainMenu()
 
 void Game::Travel()
 {
-	v.GenerateEvent(player);
+	this->v.GenerateEvent(player);
 
 }
 
@@ -78,7 +78,7 @@ void Game::SaveGame()
 
 void Game::SavePlayer()
 {
-	std::string fileName;
+	std::string fileName = "savePlayer.txt";
 	std::ofstream outFile(fileName);
 	if (outFile.is_open())
 	{
@@ -92,8 +92,10 @@ void Game::SavePlayer()
 	std::cout << "Is saved" << std::endl;
 }
 
-void Game::LoadGame()
+void Game::LoadPlayer()
 {
+	std::string fileName = "savePlayer.txt";
+	player.LoadStats(fileName);
 }
 
 void Game::NewPlayer()
@@ -103,6 +105,7 @@ void Game::NewPlayer()
 
 void Game::NewEnemy()
 {
+	srand(static_cast<unsigned int>(time(0)));
 	std::string name = "smile";
 	int level = 10;
 	int damage = 10;
@@ -123,4 +126,27 @@ void Game::PrintPlayerStats()
 bool Game::GetPlaying()
 {
 	return this->playing;
+}
+void Game::SkillUp()
+{
+	while (player.GetSkillPoints() > 0)
+	{
+		std::cout << "You have " << player.GetSkillPoints() << " Skill points to use" << std::endl;
+		std::cout << "-_-_-_-Stats-_-_-_-" << std::endl;
+		std::cout << "1: Strength" << std::endl;
+		std::cout << "2: Agility" << std::endl;
+		std::cout << "3: Dexterity" << std::endl;
+		std::cout << "4: Intelligence" << std::endl;
+		std::cout << "5: Luck" << std::endl;
+		std::cin >> choice;
+		player.AddStats(choice, 1);
+	}
+	if (player.GetSkillPoints() <= 0)
+	{
+		std::cout << "Not enough Skill points" << std::endl;
+	}
+}
+void Game::LevelUp()
+{
+	player.LevelUp();
 }

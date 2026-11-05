@@ -7,7 +7,7 @@ Enemy::Enemy(std::string name, int l, int hp, int damage, int defence, int exp)
 	SetLevel(l);
 	SetHp(hp);
 	SetDamageMin(damage/2);
-	SetDamageMax(damage*2);
+	SetDamageMax(damage+4);
 	SetDefence(defence);
 	SetExp(exp);
 }
